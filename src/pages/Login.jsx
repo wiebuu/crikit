@@ -1,7 +1,13 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, Lock } from 'lucide-react';
-import { Logo } from '../components/ui.jsx';
+import { ArrowRight, Info, Radio, Trophy, CalendarDays } from 'lucide-react';
+import { Logo, ThemeToggle } from '../components/ui.jsx';
+
+const points = [
+  { icon: CalendarDays, text: 'Clash-free fixtures generated in seconds' },
+  { icon: Radio, text: 'Ball-by-ball scoring streamed live to every screen' },
+  { icon: Trophy, text: 'Points and Net Run Rate updated after every result' },
+];
 
 export default function Login() {
   const [role, setRole] = useState('Admin');
@@ -16,24 +22,32 @@ export default function Login() {
   return (
     <div className="auth">
       <div className="auth-side">
-        <Link to="/" className="brand" style={{ padding: 0 }}>
+        <Link to="/" className="brand">
           <Logo />
           <div><div className="brand-name">Crickit</div><div className="brand-sub">Team Management System</div></div>
         </Link>
-        <blockquote>
-          “Fixtures, scores and standings used to live in five different spreadsheets. Now the whole league runs from one screen.”
-          <div style={{ fontSize: 14, color: '#9fc4b5', fontWeight: 500, marginTop: 16 }}>— Tournament organiser, pilot season</div>
-        </blockquote>
+        <div>
+          <blockquote>Run your whole tournament — teams, fixtures, scores and standings — from one screen.</blockquote>
+          <div style={{ display: 'grid', gap: 14, marginTop: 32 }}>
+            {points.map(({ icon: Icon, text }) => (
+              <div key={text} className="row" style={{ color: '#b7cbc2', fontSize: 14.5 }}>
+                <span style={{ width: 30, height: 30, borderRadius: 8, display: 'grid', placeItems: 'center', background: 'rgba(16,185,129,.15)', color: '#4ade9f' }}><Icon size={15} /></span>
+                {text}
+              </div>
+            ))}
+          </div>
+        </div>
         <div style={{ fontSize: 12.5, color: '#6f8a7e' }}>© 2026 Crickit · SRHU School of Science & Technology</div>
       </div>
 
       <div className="auth-form">
+        <div className="corner"><ThemeToggle /></div>
         <form onSubmit={submit}>
-          <h1 style={{ fontSize: 26, fontWeight: 800 }}>Welcome back</h1>
-          <p className="muted" style={{ marginTop: 6 }}>Sign in to manage your teams and tournaments.</p>
+          <h1 style={{ fontSize: 26, letterSpacing: '-0.035em' }}>Sign in to Crickit</h1>
+          <p className="muted" style={{ marginTop: 6 }}>Welcome back. Choose your role and enter your details.</p>
 
-          <div className="field">
-            <label>Sign in as</label>
+          <div className="field" style={{ marginTop: 28 }}>
+            <label>Role</label>
             <div className="role-pick">
               {['Admin', 'Coach', 'Player'].map((r) => (
                 <button type="button" key={r} className={role === r ? 'on' : ''} onClick={() => setRole(r)}>{r}</button>
@@ -48,11 +62,15 @@ export default function Login() {
             <div className="row between"><label htmlFor="pw">Password</label><a className="subtle" style={{ fontSize: 12.5 }} href="#/login">Forgot password?</a></div>
             <input id="pw" className="input" type="password" placeholder="••••••••" autoComplete="current-password" />
           </div>
-          <button className="btn btn-primary btn-lg" style={{ width: '100%', justifyContent: 'center', marginTop: 24 }}>
-            Sign in as {role} <ArrowRight size={16} />
+          <button className="btn btn-primary btn-lg" style={{ width: '100%', marginTop: 24 }}>
+            Continue as {role} <ArrowRight size={16} />
           </button>
-          <p className="row subtle" style={{ fontSize: 12.5, marginTop: 16, gap: 6, justifyContent: 'center' }}>
-            <Lock size={13} /> Demo mode — any details will open the dashboard.
+          <div className="or">Prototype</div>
+          <p className="row subtle" style={{ fontSize: 12.5, gap: 8, alignItems: 'flex-start' }}>
+            <Info size={14} style={{ flex: 'none', marginTop: 2 }} /> Demo mode: authentication isn’t connected yet, so any details open the dashboard.
+          </p>
+          <p className="subtle" style={{ fontSize: 13, marginTop: 28, textAlign: 'center' }}>
+            <Link to="/" style={{ color: 'var(--text-2)' }}>← Back to website</Link>
           </p>
         </form>
       </div>

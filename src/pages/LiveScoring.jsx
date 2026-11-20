@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Undo2, ShieldCheck, Wifi } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts';
-import { PageHead, TeamMark } from '../components/ui.jsx';
+import { PageHead, TeamMark, chart } from '../components/ui.jsx';
 import { liveMatch, teamById } from '../data/mock.js';
 
 // convert "14.4" -> balls and back
@@ -62,7 +62,7 @@ export default function LiveScoring() {
           <div className="row" style={{ gap: 16 }}>
             <TeamMark id="GT" size="lg" />
             <div>
-              <div style={{ color: '#9fc4b5', fontSize: 13, fontWeight: 600 }}>{teamById.GT.name} · batting</div>
+              <div style={{ color: '#8fb3a5', fontSize: 12.5, fontWeight: 500 }}>{teamById.GT.name} · batting</div>
               <div className="row" style={{ alignItems: 'baseline', gap: 10 }}>
                 <span className="sb-score">{s.runs}/{s.wkts}</span>
                 <span className="sb-overs">({toOvers(s.balls)} ov)</span>
@@ -70,8 +70,8 @@ export default function LiveScoring() {
             </div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ color: '#9fc4b5', fontSize: 13, fontWeight: 600 }}>{teamById.RR.name} · 1st innings</div>
-            <div className="mono" style={{ fontSize: 22, fontWeight: 700 }}>172/6 <span className="sb-overs">(20 ov)</span></div>
+            <div style={{ color: '#8fb3a5', fontSize: 12.5, fontWeight: 500 }}>{teamById.RR.name} · 1st innings</div>
+            <div className="mono" style={{ fontSize: 22, fontWeight: 500 }}>172/6 <span className="sb-overs">(20 ov)</span></div>
           </div>
         </div>
         <div className="sb-pills">
@@ -90,7 +90,7 @@ export default function LiveScoring() {
             <button className="btn btn-sm" onClick={undo} disabled={!s.history.length}><Undo2 size={14} /> Undo</button>
           </div>
           <div className="card-body">
-            <div className="subtle" style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: 10 }}>This over</div>
+            <div className="subtle" style={{ fontSize: 12.5, fontWeight: 500, marginBottom: 10 }}>This over</div>
             <div className="balls" style={{ marginBottom: 22 }}>
               {s.over.map((b, i) => <span key={i} className={`ball b${b}`}>{b}</span>)}
               {Array.from({ length: empties }).map((_, i) => <span key={'e' + i} className="ball empty">·</span>)}
@@ -117,7 +117,7 @@ export default function LiveScoring() {
               <tbody>
                 {liveMatch.batters.map((b) => (
                   <tr key={b.name}>
-                    <td><b>{b.name}</b>{b.onStrike && <span style={{ color: 'var(--ball)', marginLeft: 6 }}>●</span>}</td>
+                    <td><b>{b.name}</b>{b.onStrike && <span style={{ color: 'var(--red)', marginLeft: 6 }}>●</span>}</td>
                     <td className="num"><b>{b.r}</b></td><td className="num">{b.b}</td><td className="num">{b.f}</td><td className="num">{b.s}</td>
                     <td className="num">{((b.r / b.b) * 100).toFixed(1)}</td>
                   </tr>
@@ -145,11 +145,11 @@ export default function LiveScoring() {
           <div className="card-body" style={{ height: 300 }}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={liveMatch.worm} margin={{ left: -16, right: 8 }}>
-                <CartesianGrid vertical={false} stroke="#e9eeec" />
-                <XAxis dataKey="over" tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: '#85938d' }} />
-                <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: '#85938d' }} />
-                <Tooltip contentStyle={{ borderRadius: 8, border: '1px solid #e3e8e6', fontSize: 13 }} labelFormatter={(o) => `Over ${o}`} />
-                <Legend iconType="circle" wrapperStyle={{ fontSize: 12.5 }} />
+                <CartesianGrid {...chart.grid} />
+                <XAxis dataKey="over" {...chart.axis} />
+                <YAxis {...chart.axis} />
+                <Tooltip {...chart.tooltip} cursor={{ stroke: 'var(--border-strong)' }} labelFormatter={(o) => `Over ${o}`} />
+                <Legend {...chart.legend} />
                 <Line type="monotone" dataKey="RR" name={teamById.RR.name} stroke={teamById.RR.color} strokeWidth={2.5} dot={false} />
                 <Line type="monotone" dataKey="GT" name={teamById.GT.name} stroke={teamById.GT.color} strokeWidth={2.5} dot={false} />
               </LineChart>

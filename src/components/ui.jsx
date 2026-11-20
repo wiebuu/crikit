@@ -1,3 +1,5 @@
+import { Sun, Moon } from 'lucide-react';
+import { useTheme } from '../theme.js';
 import { teamById } from '../data/mock.js';
 
 export function TeamMark({ id, size = '' }) {
@@ -44,10 +46,10 @@ export function PageHead({ title, sub, children }) {
 
 export function Stat({ label, value, foot, icon: Icon, tone = 'green' }) {
   const tones = {
-    green: ['var(--brand-50)', 'var(--brand)'],
-    red: ['var(--ball-50)', 'var(--ball)'],
-    blue: ['var(--blue-50)', 'var(--blue)'],
-    amber: ['var(--amber-50)', 'var(--amber)'],
+    green: ['var(--brand-soft)', 'var(--brand)'],
+    red: ['var(--red-soft)', 'var(--red)'],
+    blue: ['var(--blue-soft)', 'var(--blue)'],
+    amber: ['var(--amber-soft)', 'var(--amber)'],
   };
   const [bg, fg] = tones[tone];
   return (
@@ -76,3 +78,28 @@ export function Logo({ size = 20 }) {
 export const fmtDate = (iso) =>
   new Date(iso + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 export const fmtNrr = (n) => (n > 0 ? '+' : '') + n.toFixed(3);
+
+// ---- Theme toggle ----
+
+export function ThemeToggle({ className = 'icon-btn' }) {
+  const { theme, toggle } = useTheme();
+  const dark = theme === 'dark';
+  return (
+    <button className={className} onClick={toggle} aria-label={`Switch to ${dark ? 'light' : 'dark'} theme`} title={`Switch to ${dark ? 'light' : 'dark'} theme`}>
+      {dark ? <Sun size={16} /> : <Moon size={16} />}
+    </button>
+  );
+}
+
+// ---- Chart presets (theme-aware through CSS variables) ----
+export const chart = {
+  grid: { vertical: false, stroke: 'var(--chart-grid)' },
+  axis: { tickLine: false, axisLine: false, tick: { fontSize: 12, fill: 'var(--text-3)' } },
+  tooltip: {
+    cursor: { fill: 'var(--surface-2)' },
+    contentStyle: { background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 8, fontSize: 12.5, color: 'var(--text)' },
+    labelStyle: { color: 'var(--text)', fontWeight: 500 },
+    itemStyle: { color: 'var(--text-2)' },
+  },
+  legend: { iconType: 'circle', iconSize: 8, wrapperStyle: { fontSize: 12.5, paddingTop: 8 } },
+};

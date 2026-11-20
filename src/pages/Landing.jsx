@@ -1,10 +1,14 @@
 import { Link } from 'react-router-dom';
 import {
   ArrowRight, CalendarX2, FileWarning, EyeOff, Users, CalendarDays, Radio, Trophy, FileText, ShieldCheck,
-  Check, Monitor, Server, Database, Zap, Sparkles, Play,
+  Check, Monitor, Server, Database, Zap, Plus, LayoutDashboard, Shield, KeyRound, History, Lock,
+  ClipboardList, UserRound, Github,
 } from 'lucide-react';
-import { Logo, TeamMark, Form, fmtNrr } from '../components/ui.jsx';
-import { teams } from '../data/mock.js';
+import { Logo, TeamMark, Form, fmtNrr, ThemeToggle } from '../components/ui.jsx';
+import { teams, liveMatch, fixtures, teamById } from '../data/mock.js';
+
+const standings = [...teams].sort((a, b) => b.pts - a.pts || b.nrr - a.nrr);
+const scrollTo = (id) => (e) => { e.preventDefault(); document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }); };
 
 const problems = [
   { icon: CalendarX2, title: 'Scattered scheduling', text: 'Paper and spreadsheets cause fixture conflicts and last-minute changes.' },
@@ -12,76 +16,161 @@ const problems = [
   { icon: EyeOff, title: 'Delayed visibility', text: 'Standings aren’t updated in real time, so teams and fans lack timely insight.' },
 ];
 
-const features = [
-  { icon: Users, title: 'Team & player registration', text: 'Structured profiles for squads, captains, coaches and players — with roles, fitness and history.' },
-  { icon: CalendarDays, title: 'Smart fixture engine', text: 'Generates clash-free round-robin schedules and resolves venue and rest-day conflicts automatically.' },
-  { icon: Radio, title: 'Live ball-by-ball scoring', text: 'Fast scoring console that streams every delivery to connected dashboards in real time.' },
-  { icon: Trophy, title: 'Instant leaderboards', text: 'Points and Net Run Rate recalculated the moment a result is committed. No manual maths.' },
-  { icon: FileText, title: 'Reports & summaries', text: 'Downloadable PDFs and CSVs, plus shareable match summaries for every stakeholder.' },
-  { icon: ShieldCheck, title: 'Secure by design', text: 'JWT authentication, role-based access, input validation and an immutable audit trail for score edits.' },
+const steps = [
+  { title: 'Register teams & players', text: 'Coaches build structured squad profiles. Admins approve teams and set up venues.' },
+  { title: 'Generate the schedule', text: 'The fixture engine creates a clash-free round-robin across every venue in one click.' },
+  { title: 'Score live, publish instantly', text: 'Each delivery is recorded, verified and pushed to dashboards, standings and reports.' },
 ];
 
 const roles = [
-  { title: 'Admin', text: 'Runs the tournament end to end.', items: ['Register teams & venues', 'Generate and edit fixtures', 'Verify scores & export reports'] },
-  { title: 'Coach', text: 'Manages a squad through the season.', items: ['Maintain player profiles', 'Pick playing XI per match', 'Track team form & stats'] },
-  { title: 'Player & fans', text: 'Follow every ball as it happens.', items: ['Live scores & commentary', 'Personal stats & records', 'Leaderboards & fixtures'] },
+  { icon: Shield, title: 'Admin', text: 'Runs the tournament end to end.', items: ['Register teams, venues and officials', 'Generate and edit fixtures', 'Verify scores and export reports'] },
+  { icon: ClipboardList, title: 'Coach', text: 'Manages a squad through the season.', items: ['Maintain player profiles', 'Pick the playing XI for each match', 'Track team form and statistics'] },
+  { icon: UserRound, title: 'Players & fans', text: 'Follow every ball as it happens.', items: ['Live scores and commentary', 'Personal stats and records', 'Leaderboards and fixtures'] },
 ];
 
 const arch = [
-  { icon: Monitor, layer: 'Client', title: 'React', text: 'Responsive, mobile-first dashboards, fixture calendar and scoring UI.' },
-  { icon: Server, layer: 'Application', title: 'Express + Node.js', text: 'REST API with role-based middleware and JWT auth.' },
-  { icon: Database, layer: 'Data', title: 'MongoDB', text: 'Teams, players, fixtures and ball-by-ball events.' },
-  { icon: Zap, layer: 'Realtime', title: 'Socket.IO', text: 'Pushes live scores and leaderboard updates instantly.' },
+  { icon: Monitor, layer: '01 · Client', title: 'React', text: 'Mobile-first dashboards, fixture calendar and scoring UI.' },
+  { icon: Server, layer: '02 · API', title: 'Express + Node.js', text: 'REST API with role-based middleware and JWT auth.' },
+  { icon: Database, layer: '03 · Data', title: 'MongoDB', text: 'Teams, players, fixtures and ball-by-ball events.' },
+  { icon: Zap, layer: '04 · Realtime', title: 'Socket.IO', text: 'Pushes scores and standings to clients instantly.' },
+];
+
+const security = [
+  { icon: KeyRound, title: 'JWT authentication', text: 'Short-lived access tokens with refresh flows.' },
+  { icon: Lock, title: 'Role-based access', text: 'Server-side checks for Admin, Coach and Player.' },
+  { icon: History, title: 'Audit trail', text: 'Every score edit is logged with who, when and why.' },
 ];
 
 const timeline = [
-  { m: 'Month 01', t: 'Discovery & Architecture' },
-  { m: 'Month 02', t: 'Core Data & Scheduling Engine' },
-  { m: 'Month 03', t: 'Scoring & Live Pipeline' },
-  { m: 'Month 04', t: 'Dashboards & Reporting' },
-  { m: 'Month 05', t: 'Pilot & Tournament Launch' },
+  { m: 'Month 01', t: 'Discovery & architecture', p: 100 },
+  { m: 'Month 02', t: 'Core data & scheduling engine', p: 100 },
+  { m: 'Month 03', t: 'Scoring & live pipeline', p: 60 },
+  { m: 'Month 04', t: 'Dashboards & reporting', p: 15 },
+  { m: 'Month 05', t: 'Pilot & tournament launch', p: 0 },
 ];
 
-function HeroMock() {
-  const rows = [...teams].sort((a, b) => b.pts - a.pts || b.nrr - a.nrr).slice(0, 4);
+const faqs = [
+  { q: 'Who is Crickit built for?', a: 'School, college and club tournament organisers, plus the coaches, players and fans who follow them. It replaces spreadsheets and group chats with one shared source of truth.' },
+  { q: 'How does the fixture generator avoid clashes?', a: 'It uses a deterministic round-robin algorithm that checks venue availability and minimum rest days per team before committing a schedule.' },
+  { q: 'How is Net Run Rate calculated?', a: 'NRR is recomputed on every committed result: runs scored per over minus runs conceded per over, across all completed matches.' },
+  { q: 'Can scores be changed after a match?', a: 'Only by authorised roles. Every edit is recorded in an immutable audit log and can require umpire verification.' },
+  { q: 'Does it work on phones?', a: 'Yes. The interface is mobile-first, so scorers can record deliveries from the boundary on any device.' },
+];
+
+/* ---------- Product preview shown in the hero ---------- */
+function ProductPreview() {
+  const lm = liveMatch;
   return (
-    <div className="hero-shot">
-      <div className="mock">
-        <div className="mock-bar"><i /><i /><i /></div>
-        <div className="mock-body">
-          <div className="scoreboard" style={{ padding: '16px 18px' }}>
-            <div className="row between">
-              <div className="row"><TeamMark id="GT" /><div>
-                <div style={{ fontSize: 11.5, color: '#9fc4b5' }}>Ganga Titans · chasing 173</div>
-                <div className="mono" style={{ fontSize: 26, fontWeight: 800 }}>127/4 <span className="sb-overs" style={{ fontSize: 12 }}>(14.4)</span></div>
-              </div></div>
-              <span className="badge badge-red" style={{ background: 'rgba(230,57,70,.18)', color: '#ff8a93' }}><span className="live-dot" /> LIVE</span>
-            </div>
-            <div className="balls" style={{ marginTop: 12 }}>
-              {['1', '4', 'W', '0'].map((b, i) => <span key={i} className={`ball b${b}`} style={{ width: 28, height: 28, fontSize: 12 }}>{b}</span>)}
-            </div>
+    <div className="product-frame">
+      <div className="product-inner">
+        <div className="pf-bar"><i /><i /><i /><span className="pf-url">crickit.app/dashboard</span></div>
+        <div className="pf-body">
+          <div className="pf-side">
+            <div className="on"><LayoutDashboard size={14} /> Dashboard</div>
+            <div><Radio size={14} /> Live Scoring</div>
+            <div><CalendarDays size={14} /> Fixtures</div>
+            <div><Trophy size={14} /> Leaderboard</div>
+            <div><Shield size={14} /> Teams</div>
+            <div><Users size={14} /> Players</div>
+            <div><FileText size={14} /> Reports</div>
           </div>
-          <div className="card" style={{ boxShadow: 'none' }}>
-            <table className="table" style={{ fontSize: 12.5 }}>
-              <thead><tr><th>Team</th><th className="num">W</th><th className="num">NRR</th><th className="num">Pts</th></tr></thead>
-              <tbody>
-                {rows.map((t) => (
-                  <tr key={t.id}>
-                    <td style={{ padding: '9px 14px' }}><div className="row" style={{ gap: 8 }}><TeamMark id={t.id} size="sm" /><b>{t.name}</b></div></td>
-                    <td className="num" style={{ padding: '9px 14px' }}>{t.w}</td>
-                    <td className="num" style={{ padding: '9px 14px', color: 'var(--brand)' }}>{fmtNrr(t.nrr)}</td>
-                    <td className="num" style={{ padding: '9px 14px' }}><b>{t.pts}</b></td>
-                  </tr>
+          <div className="pf-main">
+            <div style={{ display: 'grid', gap: 14 }}>
+              <div className="scoreboard" style={{ padding: '16px 18px' }}>
+                <div className="row between">
+                  <span className="sb-label">M31 · Ganga Titans chasing 173</span>
+                  <span className="badge badge-red" style={{ background: 'rgba(242,100,112,.15)', color: '#ff8d97' }}><span className="live-dot" /> LIVE</span>
+                </div>
+                <div className="row" style={{ marginTop: 10 }}>
+                  <TeamMark id="GT" />
+                  <span className="sb-score" style={{ fontSize: 32 }}>{lm.runs}/{lm.wkts}</span>
+                  <span className="sb-overs">({lm.overs})</span>
+                </div>
+                <div className="sb-pills" style={{ marginTop: 12 }}>
+                  <div className="sb-pill">CRR<b>{lm.crr}</b></div>
+                  <div className="sb-pill">RRR<b>{lm.rrr}</b></div>
+                  <div className="sb-pill">Need<b>46</b></div>
+                </div>
+              </div>
+              <div className="card" style={{ boxShadow: 'none' }}>
+                <div className="card-head" style={{ minHeight: 44, padding: '10px 16px' }}><h3 style={{ fontSize: 13 }}>Upcoming</h3></div>
+                {fixtures.filter((f) => f.status === 'Upcoming').slice(0, 2).map((f) => (
+                  <div key={f.id} className="row between" style={{ padding: '10px 16px', borderTop: '1px solid var(--border)', fontSize: 12.5 }}>
+                    <span className="row" style={{ gap: 8 }}><TeamMark id={f.home} size="sm" /><b style={{ fontWeight: 500 }}>{f.home} vs {f.away}</b><TeamMark id={f.away} size="sm" /></span>
+                    <span className="subtle mono">{f.date.slice(5)} · {f.time}</span>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+            </div>
+            <div className="card" style={{ boxShadow: 'none', overflow: 'hidden' }}>
+              <div className="card-head" style={{ minHeight: 44, padding: '10px 16px' }}><h3 style={{ fontSize: 13 }}>Points table</h3><span className="hint">NRR</span></div>
+              <table className="table" style={{ fontSize: 12.5 }}>
+                <tbody>
+                  {standings.slice(0, 6).map((t, i) => (
+                    <tr key={t.id} className={i < 4 ? 'qualify' : ''}>
+                      <td style={{ padding: '9px 14px' }}><div className="row" style={{ gap: 8 }}><span className="subtle mono" style={{ width: 12 }}>{i + 1}</span><TeamMark id={t.id} size="sm" /><span style={{ fontWeight: 500 }}>{t.name}</span></div></td>
+                      <td className="num" style={{ padding: '9px 14px', color: t.nrr >= 0 ? 'var(--brand-text)' : 'var(--red)' }}>{fmtNrr(t.nrr)}</td>
+                      <td className="num" style={{ padding: '9px 14px' }}><b>{t.pts}</b></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
-      <div className="float-card">
-        <span className="stat-icon" style={{ background: 'var(--brand-50)', color: 'var(--brand)' }}><Check size={17} /></span>
-        <div><b>Schedule generated</b><div className="subtle" style={{ fontSize: 12 }}>56 matches · 0 clashes</div></div>
+    </div>
+  );
+}
+
+/* ---------- Small visuals for the bento grid ---------- */
+function BallsVisual() {
+  return (
+    <div className="bento-visual">
+      <div className="balls">
+        {['1', '4', 'W', '0', '6', '2'].map((b, i) => <span key={i} className={`ball b${b}`}>{b}</span>)}
       </div>
+      <div style={{ marginTop: 16, display: 'grid', gap: 8 }}>
+        {liveMatch.commentary.slice(0, 3).map((c) => (
+          <div key={c.ball} className="row" style={{ fontSize: 13, gap: 10, padding: '8px 12px', borderRadius: 8, background: 'var(--surface-2)', border: '1px solid var(--border)' }}>
+            <span className="mono" style={{ fontWeight: 500, fontSize: 12 }}>{c.ball}</span>
+            <span className="muted" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.text}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function StandingsVisual() {
+  return (
+    <div className="bento-visual" style={{ display: 'grid', gap: 8 }}>
+      {standings.slice(0, 3).map((t, i) => (
+        <div key={t.id} className="row between" style={{ padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface-2)' }}>
+          <span className="row" style={{ gap: 10 }}><span className="mono subtle" style={{ fontSize: 12 }}>{i + 1}</span><TeamMark id={t.id} size="sm" /><span style={{ fontWeight: 500, fontSize: 13 }}>{t.name}</span></span>
+          <Form form={t.form.slice(-3)} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function FixtureVisual() {
+  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const filled = { 0: ['HH', 'NK'], 2: ['DS', 'MM'], 3: ['RR', 'GT'], 5: ['HR', 'GG'], 6: ['HH', 'DS'] };
+  return (
+    <div className="bento-visual" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 6 }}>
+      {days.map((d, i) => (
+        <div key={d} style={{ border: '1px solid var(--border)', borderRadius: 8, padding: 8, background: 'var(--surface-2)', minHeight: 84 }}>
+          <div className="subtle" style={{ fontSize: 11 }}>{d}</div>
+          {filled[i] && (
+            <div style={{ display: 'grid', gap: 4, marginTop: 8 }}>
+              <TeamMark id={filled[i][0]} size="sm" />
+              <TeamMark id={filled[i][1]} size="sm" />
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   );
 }
@@ -90,56 +179,72 @@ export default function Landing() {
   return (
     <div className="lp">
       <header className="lp-nav">
-        <Link to="/" className="brand">
-          <Logo />
-          <span className="brand-name">Crickit</span>
-        </Link>
-        <nav>
-          <a href="#features" onClick={(e) => { e.preventDefault(); document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' }); }}>Features</a>
-          <a href="#roles" onClick={(e) => { e.preventDefault(); document.getElementById('roles')?.scrollIntoView({ behavior: 'smooth' }); }}>Who it’s for</a>
-          <a href="#tech" onClick={(e) => { e.preventDefault(); document.getElementById('tech')?.scrollIntoView({ behavior: 'smooth' }); }}>Technology</a>
-          <a href="#roadmap" onClick={(e) => { e.preventDefault(); document.getElementById('roadmap')?.scrollIntoView({ behavior: 'smooth' }); }}>Roadmap</a>
-        </nav>
-        <div className="spacer" />
-        <Link to="/login" className="btn btn-ghost">Sign in</Link>
-        <Link to="/app" className="btn btn-primary">Open dashboard</Link>
+        <div className="container">
+          <Link to="/" className="brand">
+            <Logo />
+            <span className="brand-name">Crickit</span>
+          </Link>
+          <nav>
+            <a href="#features" onClick={scrollTo('features')}>Features</a>
+            <a href="#how" onClick={scrollTo('how')}>How it works</a>
+            <a href="#roles" onClick={scrollTo('roles')}>Roles</a>
+            <a href="#tech" onClick={scrollTo('tech')}>Technology</a>
+            <a href="#faq" onClick={scrollTo('faq')}>FAQ</a>
+          </nav>
+          <div className="spacer" />
+          <ThemeToggle className="icon-btn ghost" />
+          <Link to="/login" className="btn btn-ghost hide-sm">Sign in</Link>
+          <Link to="/app" className="btn btn-dark">Open app</Link>
+        </div>
       </header>
 
+      {/* Hero */}
       <section className="hero">
-        <div className="container hero-grid">
-          <div style={{ paddingBottom: 72 }}>
-            <span className="eyebrow"><Sparkles size={13} /> Cricket analytics & sports management</span>
-            <h1>From chaos to <em>clear play.</em></h1>
-            <p className="lead">
-              One secure platform for team registration, fixture scheduling, live scoring and real-time
-              leaderboards — built to save time, remove errors and make tournaments transparent for admins,
-              coaches and fans.
-            </p>
-            <div className="hero-cta">
-              <Link to="/app" className="btn btn-primary btn-lg">Explore the dashboard <ArrowRight size={17} /></Link>
-              <Link to="/app/live" className="btn btn-lg btn-outline"><Play size={16} /> Watch live scoring</Link>
-            </div>
-            <div className="hero-trust">
-              <div><b>&lt;100ms</b>live score updates</div>
-              <div><b>0</b>fixture clashes</div>
-              <div><b>3</b>access roles</div>
-            </div>
+        <div className="container">
+          <Link to="/app/live" className="eyebrow">
+            <span className="tag">New</span> Live ball-by-ball scoring is here <ArrowRight size={13} />
+          </Link>
+          <h1>Cricket tournaments, <span className="accent">run like clockwork.</span></h1>
+          <p className="lead">
+            Crickit brings team registration, fixture scheduling, live scoring and real-time leaderboards
+            into one secure platform — for admins, coaches and fans.
+          </p>
+          <div className="hero-cta">
+            <Link to="/app" className="btn btn-primary btn-lg">Explore the dashboard <ArrowRight size={16} /></Link>
+            <Link to="/app/live" className="btn btn-lg"><Radio size={16} /> Try live scoring</Link>
           </div>
-          <HeroMock />
+          <div className="hero-note">
+            <span><Check size={14} /> No setup needed</span>
+            <span><Check size={14} /> Works on any device</span>
+            <span><Check size={14} /> Sample league data included</span>
+          </div>
+          <ProductPreview />
         </div>
+        <div className="hero-fade" />
       </section>
 
+      {/* Metrics */}
+      <div className="container">
+        <div className="metrics" style={{ marginTop: 24 }}>
+          <div className="metric"><b>&lt;100ms</b><span>Live score delivery</span></div>
+          <div className="metric"><b>0</b><span>Fixture clashes</span></div>
+          <div className="metric"><b>3</b><span>Access roles</span></div>
+          <div className="metric"><b>100%</b><span>Score edits audited</span></div>
+        </div>
+      </div>
+
+      {/* Problem */}
       <section className="section">
         <div className="container">
           <div className="section-head">
-            <div className="kicker">The problem</div>
+            <span className="kicker">// The problem</span>
             <h2>Why cricket operations break down</h2>
-            <p>Most local and college tournaments still run on paper, spreadsheets and group chats.</p>
+            <p>Most local and college tournaments still run on paper, spreadsheets and group chats. That costs time and causes mistakes.</p>
           </div>
           <div className="problems">
             {problems.map(({ icon: Icon, title, text }) => (
               <div key={title} className="problem">
-                <div className="ic"><Icon size={20} /></div>
+                <div className="ic"><Icon size={18} /></div>
                 <h3>{title}</h3>
                 <p>{text}</p>
               </div>
@@ -148,92 +253,171 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="section alt" id="features">
+      {/* Features (bento) */}
+      <section className="section" id="features" style={{ paddingTop: 0 }}>
         <div className="container">
           <div className="section-head">
-            <div className="kicker">Features</div>
+            <span className="kicker">// Features</span>
             <h2>Everything a tournament needs, in one place</h2>
             <p>From the first registration to the final trophy, every step is tracked, verified and visible.</p>
           </div>
-          <div className="features">
-            {features.map(({ icon: Icon, title, text }) => (
-              <div key={title} className="feature">
-                <div className="ic"><Icon size={21} /></div>
-                <h3>{title}</h3>
-                <p>{text}</p>
+          <div className="bento">
+            <div className="bento-card span-4">
+              <div className="ic"><Radio size={18} /></div>
+              <h3>Live ball-by-ball scoring</h3>
+              <p>A fast scoring console built for the boundary rope. Every delivery streams to connected dashboards in real time.</p>
+              <BallsVisual />
+            </div>
+            <div className="bento-card span-2">
+              <div className="ic"><Trophy size={18} /></div>
+              <h3>Instant leaderboards</h3>
+              <p>Points and Net Run Rate recalculated the moment a result is committed.</p>
+              <StandingsVisual />
+            </div>
+            <div className="bento-card span-3">
+              <div className="ic"><CalendarDays size={18} /></div>
+              <h3>Smart fixture engine</h3>
+              <p>Clash-free round-robin schedules that respect venues and rest days.</p>
+              <FixtureVisual />
+            </div>
+            <div className="bento-card span-3">
+              <div className="ic"><Users size={18} /></div>
+              <h3>Team & player registration</h3>
+              <p>Structured profiles for squads, captains, coaches and players, with roles, fitness and history.</p>
+              <div className="bento-visual" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                {teams.map((t) => <span key={t.id} className="badge" style={{ height: 30, paddingLeft: 4 }}><TeamMark id={t.id} size="sm" />{t.name}</span>)}
+              </div>
+            </div>
+            <div className="bento-card span-3">
+              <div className="ic"><FileText size={18} /></div>
+              <h3>Reports & summaries</h3>
+              <p>Downloadable PDF and CSV reports, plus shareable match summaries for every stakeholder.</p>
+            </div>
+            <div className="bento-card span-3">
+              <div className="ic"><ShieldCheck size={18} /></div>
+              <h3>Secure by design</h3>
+              <p>JWT authentication, role-based access, input validation and an audit trail for every score edit.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="section" id="how" style={{ paddingTop: 0 }}>
+        <div className="container">
+          <div className="section-head">
+            <span className="kicker">// How it works</span>
+            <h2>From sign-up to final in three steps</h2>
+          </div>
+          <div className="steps">
+            {steps.map((s, i) => (
+              <div key={s.title} className="step">
+                <span className="n">STEP {String(i + 1).padStart(2, '0')}</span>
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section" id="roles">
+      {/* Roles */}
+      <section className="section" id="roles" style={{ paddingTop: 0 }}>
         <div className="container">
           <div className="section-head">
-            <div className="kicker">Who it’s for</div>
+            <span className="kicker">// Roles</span>
             <h2>Built around the people who run the game</h2>
-            <p>Role-based access means everyone sees exactly what they need — and nothing they shouldn’t change.</p>
+            <p>Role-based access means everyone sees exactly what they need, and nothing they shouldn’t change.</p>
           </div>
           <div className="roles">
-            {roles.map((r) => (
-              <div key={r.title} className="role-card">
-                <h3 style={{ fontSize: 19 }}>{r.title}</h3>
-                <p className="muted" style={{ marginTop: 4 }}>{r.text}</p>
-                <ul>{r.items.map((i) => <li key={i}><Check size={16} /> {i}</li>)}</ul>
+            {roles.map(({ icon: Icon, title, text, items }) => (
+              <div key={title} className="role-card">
+                <div className="head">
+                  <span className="ic"><Icon size={17} /></span>
+                  <div><h3>{title}</h3><p className="muted" style={{ fontSize: 13.5 }}>{text}</p></div>
+                </div>
+                <ul>{items.map((i) => <li key={i}><Check size={15} /> {i}</li>)}</ul>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section alt" id="tech">
+      {/* Technology */}
+      <section className="section" id="tech" style={{ paddingTop: 0 }}>
         <div className="container">
           <div className="section-head">
-            <div className="kicker">Technology</div>
+            <span className="kicker">// Technology</span>
             <h2>A modern MERN architecture</h2>
             <p>Three-tier design with real-time data flow, ACID-safe score edits and caching for fast leaderboards.</p>
           </div>
           <div className="arch">
             {arch.map(({ icon: Icon, layer, title, text }) => (
               <div key={title} className="arch-node">
-                <Icon size={22} color="#5ee0a8" />
-                <div style={{ marginTop: 14 }}><small>{layer}</small></div>
+                <div className="row between"><span className="ic"><Icon size={18} /></span><small>{layer}</small></div>
                 <h4>{title}</h4>
                 <p>{text}</p>
               </div>
             ))}
           </div>
+          <div className="sec-row">
+            {security.map(({ icon: Icon, title, text }) => (
+              <div key={title} className="sec-item"><Icon size={18} /><div><b>{title}</b><span>{text}</span></div></div>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="section" id="roadmap">
+      {/* Roadmap */}
+      <section className="section" id="roadmap" style={{ paddingTop: 0 }}>
         <div className="container">
           <div className="section-head">
-            <div className="kicker">Roadmap</div>
+            <span className="kicker">// Roadmap</span>
             <h2>Phased delivery, season-ready</h2>
-            <p>Core algorithms are de-risked early so an end-to-end solution ships before the season opener.</p>
+            <p>Core algorithms are de-risked early so a complete solution ships before the season opener.</p>
           </div>
           <div className="timeline">
-            {timeline.map((s, i) => (
+            {timeline.map((s) => (
               <div key={s.m} className="tl">
-                <div className="dot">{String(i + 1).padStart(2, '0')}</div>
-                <small>{s.m.toUpperCase()}</small>
+                <div className="bar"><i style={{ width: `${s.p}%` }} /></div>
+                <small>{s.m}</small>
                 <h4>{s.t}</h4>
+                <span className={`badge ${s.p === 100 ? 'badge-green' : s.p > 0 ? 'badge-amber' : ''}`} style={{ marginTop: 12 }}>
+                  {s.p === 100 ? 'Done' : s.p > 0 ? 'In progress' : 'Planned'}
+                </span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* FAQ */}
+      <section className="section" id="faq" style={{ paddingTop: 0 }}>
+        <div className="container">
+          <div className="section-head center">
+            <span className="kicker">// FAQ</span>
+            <h2>Frequently asked questions</h2>
+          </div>
+          <div className="faq">
+            {faqs.map((f) => (
+              <details key={f.q}>
+                <summary>{f.q}<Plus size={18} /></summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
       <div className="container">
         <div className="cta-band">
-          <div>
-            <h2>Ready to run your next tournament?</h2>
-            <p>Take a tour of the admin dashboard with sample league data.</p>
+          <h2>Ready for your next tournament?</h2>
+          <p>Take a tour of the admin dashboard with a full sample league.</p>
+          <div className="row">
+            <Link to="/app" className="btn btn-lg btn-white">Open dashboard <ArrowRight size={16} /></Link>
+            <Link to="/login" className="btn btn-lg btn-outline">Sign in</Link>
           </div>
-          <Link to="/app" className="btn btn-lg" style={{ background: '#fff', color: 'var(--brand)', border: 0 }}>
-            Open dashboard <ArrowRight size={17} />
-          </Link>
         </div>
       </div>
 
@@ -241,12 +425,18 @@ export default function Landing() {
         <div className="container">
           <div className="footer-grid">
             <div>
-              <div className="brand" style={{ padding: 0 }}><Logo /><span className="brand-name">Crickit</span></div>
-              <p style={{ marginTop: 12, maxWidth: 320 }}>Cricket Team Management System — a BCA project at the School of Science & Technology, Swami Rama Himalayan University.</p>
+              <div className="brand"><Logo /><span className="brand-name">Crickit</span></div>
+              <p style={{ marginTop: 14, maxWidth: 340 }}>
+                Cricket Team Management System. A BCA project at the School of Science & Technology,
+                Swami Rama Himalayan University.
+              </p>
+              <a href="https://github.com/wiebuu/crikit" target="_blank" rel="noreferrer" className="btn btn-sm" style={{ marginTop: 18 }}>
+                <Github size={14} /> View on GitHub
+              </a>
             </div>
             <div><h5>Product</h5><ul><li><Link to="/app">Dashboard</Link></li><li><Link to="/app/live">Live scoring</Link></li><li><Link to="/app/fixtures">Fixtures</Link></li><li><Link to="/app/standings">Leaderboard</Link></li></ul></div>
-            <div><h5>Manage</h5><ul><li><Link to="/app/teams">Teams</Link></li><li><Link to="/app/players">Players</Link></li><li><Link to="/app/reports">Reports</Link></li></ul></div>
-            <div><h5>Team</h5><ul><li>Sagar Saini</li><li>Aditya Kaintura</li><li>Kajal Bisht</li><li>Mentor: Dr. Anupama Mishra</li></ul></div>
+            <div><h5>Manage</h5><ul><li><Link to="/app/teams">Teams</Link></li><li><Link to="/app/players">Players</Link></li><li><Link to="/app/reports">Reports</Link></li><li><Link to="/login">Sign in</Link></li></ul></div>
+            <div><h5>Project team</h5><ul><li>Sagar Saini</li><li>Aditya Kaintura</li><li>Kajal Bisht</li><li className="subtle">Mentor: Dr. Anupama Mishra</li></ul></div>
           </div>
           <div className="footer-bottom">
             <span>© 2026 Crickit. All rights reserved.</span>

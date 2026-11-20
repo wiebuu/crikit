@@ -1,15 +1,15 @@
 import { Link } from 'react-router-dom';
 import { Shield, Users, CalendarDays, Activity, ArrowRight, ShieldCheck, Radio, FileText, RefreshCw } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts';
-import { PageHead, Stat, TeamMark, StatusBadge, Form, fmtNrr } from '../components/ui.jsx';
+import { PageHead, Stat, TeamMark, StatusBadge, Form, fmtNrr, chart } from '../components/ui.jsx';
 import { teams, fixtures, players, activity, runsByTeam, liveMatch, teamById } from '../data/mock.js';
 
 const actIcon = {
-  score: [Radio, 'var(--ball-50)', 'var(--ball)'],
-  audit: [ShieldCheck, 'var(--brand-50)', 'var(--brand)'],
-  team: [Users, 'var(--blue-50)', 'var(--blue)'],
-  fixture: [CalendarDays, 'var(--amber-50)', 'var(--amber)'],
-  report: [FileText, 'var(--surface-2)', 'var(--text-2)'],
+  score: [Radio, 'var(--red-soft)', 'var(--red)'],
+  audit: [ShieldCheck, 'var(--brand-soft)', 'var(--brand-text)'],
+  team: [Users, 'var(--blue-soft)', 'var(--blue)'],
+  fixture: [CalendarDays, 'var(--amber-soft)', 'var(--amber)'],
+  report: [FileText, 'var(--surface-3)', 'var(--text-2)'],
 };
 
 export default function Dashboard() {
@@ -44,21 +44,21 @@ export default function Dashboard() {
               <div className="row">
                 <TeamMark id="RR" size="lg" />
                 <div>
-                  <div style={{ fontWeight: 700 }}>{teamById.RR.name}</div>
-                  <div className="mono" style={{ fontSize: 22, fontWeight: 800 }}>172/6 <span className="subtle" style={{ fontSize: 13 }}>(20)</span></div>
+                  <div style={{ fontWeight: 500 }}>{teamById.RR.name}</div>
+                  <div className="mono" style={{ fontSize: 22, fontWeight: 600 }}>172/6 <span className="subtle" style={{ fontSize: 13 }}>(20)</span></div>
                 </div>
               </div>
               <span className="vs">VS</span>
               <div className="row" style={{ flexDirection: 'row-reverse', textAlign: 'right' }}>
                 <TeamMark id="GT" size="lg" />
                 <div>
-                  <div style={{ fontWeight: 700 }}>{teamById.GT.name}</div>
-                  <div className="mono" style={{ fontSize: 22, fontWeight: 800 }}>{live.runs}/{live.wkts} <span className="subtle" style={{ fontSize: 13 }}>({live.overs})</span></div>
+                  <div style={{ fontWeight: 500 }}>{teamById.GT.name}</div>
+                  <div className="mono" style={{ fontSize: 22, fontWeight: 600 }}>{live.runs}/{live.wkts} <span className="subtle" style={{ fontSize: 13 }}>({live.overs})</span></div>
                 </div>
               </div>
             </div>
-            <div style={{ marginTop: 18, height: 8, background: 'var(--surface-2)', borderRadius: 99, overflow: 'hidden', border: '1px solid var(--border)' }}>
-              <div style={{ width: `${(live.runs / live.target) * 100}%`, height: '100%', background: 'linear-gradient(90deg, var(--brand), #2bb07f)' }} />
+            <div style={{ marginTop: 18, height: 6, background: 'var(--surface-3)', borderRadius: 99, overflow: 'hidden' }}>
+              <div style={{ width: `${(live.runs / live.target) * 100}%`, height: '100%', background: 'var(--brand)', borderRadius: 99 }} />
             </div>
             <div className="row between wrap" style={{ marginTop: 10, fontSize: 13 }}>
               <span className="muted">{fixtures[2].result}</span>
@@ -96,18 +96,18 @@ export default function Dashboard() {
         <div className="card">
           <div className="card-head">
             <h3>Runs scored vs conceded</h3>
-            <span className="subtle" style={{ fontSize: 12.5 }}>League stage · all matches</span>
+            <span className="hint">League stage · all matches</span>
           </div>
           <div className="card-body" style={{ height: 300 }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={runsByTeam} barGap={3} margin={{ left: -16 }}>
-                <CartesianGrid vertical={false} stroke="#e9eeec" />
-                <XAxis dataKey="team" tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: '#85938d' }} />
-                <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: '#85938d' }} />
-                <Tooltip cursor={{ fill: '#f4f6f5' }} contentStyle={{ borderRadius: 8, border: '1px solid #e3e8e6', fontSize: 13 }} />
-                <Legend iconType="circle" wrapperStyle={{ fontSize: 12.5 }} />
-                <Bar dataKey="scored" name="Runs scored" fill="#0b6e4f" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="conceded" name="Runs conceded" fill="#b9d8cb" radius={[4, 4, 0, 0]} />
+                <CartesianGrid {...chart.grid} />
+                <XAxis dataKey="team" {...chart.axis} />
+                <YAxis {...chart.axis} />
+                <Tooltip {...chart.tooltip} />
+                <Legend {...chart.legend} />
+                <Bar dataKey="scored" name="Runs scored" fill="var(--brand)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="conceded" name="Runs conceded" fill="var(--chart-muted)" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -146,7 +146,7 @@ export default function Dashboard() {
                   <td className="mono">{i + 1}</td>
                   <td><div className="row"><TeamMark id={t.id} size="sm" /><b>{t.name}</b></div></td>
                   <td className="num">{t.p}</td><td className="num">{t.w}</td><td className="num">{t.l}</td>
-                  <td className="num" style={{ color: t.nrr >= 0 ? 'var(--brand)' : 'var(--ball)' }}>{fmtNrr(t.nrr)}</td>
+                  <td className="num" style={{ color: t.nrr >= 0 ? 'var(--brand-text)' : 'var(--red)' }}>{fmtNrr(t.nrr)}</td>
                   <td className="num"><b>{t.pts}</b></td>
                   <td><Form form={t.form} /></td>
                 </tr>
