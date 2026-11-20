@@ -59,7 +59,7 @@ export default function Players() {
                 <tr key={p.id}>
                   <td>
                     <div className="row">
-                      <span className="avatar" style={{ background: teamById[p.team].color, width: 30, height: 30, fontSize: 11 }}>
+                      <span className="avatar" style={{ width: 30, height: 30, fontSize: 11 }}>
                         {p.name.split(' ').map((s) => s[0]).join('')}
                       </span>
                       <b>{p.name}</b>

@@ -48,7 +48,7 @@ export default function Teams() {
                 </div>
                 <div className="kv">
                   <div><b>{t.w}-{t.l}</b><span>W-L</span></div>
-                  <div><b className="mono" style={{ color: t.nrr >= 0 ? 'var(--brand-text)' : 'var(--red)', fontSize: 15 }}>{fmtNrr(t.nrr)}</b><span>NRR</span></div>
+                  <div><b className="mono" style={{ color: t.nrr >= 0 ? 'var(--success)' : 'var(--red)', fontSize: 15 }}>{fmtNrr(t.nrr)}</b><span>NRR</span></div>
                   <div><b>{t.pts}</b><span>Points</span></div>
                 </div>
                 <div className="row between" style={{ marginTop: 16 }}>

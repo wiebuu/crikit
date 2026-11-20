@@ -62,7 +62,7 @@ export default function LiveScoring() {
           <div className="row" style={{ gap: 16 }}>
             <TeamMark id="GT" size="lg" />
             <div>
-              <div style={{ color: '#8fb3a5', fontSize: 12.5, fontWeight: 500 }}>{teamById.GT.name} · batting</div>
+              <div style={{ color: '#9a9cb0', fontSize: 12.5, fontWeight: 500 }}>{teamById.GT.name} · batting</div>
               <div className="row" style={{ alignItems: 'baseline', gap: 10 }}>
                 <span className="sb-score">{s.runs}/{s.wkts}</span>
                 <span className="sb-overs">({toOvers(s.balls)} ov)</span>
@@ -70,7 +70,7 @@ export default function LiveScoring() {
             </div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ color: '#8fb3a5', fontSize: 12.5, fontWeight: 500 }}>{teamById.RR.name} · 1st innings</div>
+            <div style={{ color: '#9a9cb0', fontSize: 12.5, fontWeight: 500 }}>{teamById.RR.name} · 1st innings</div>
             <div className="mono" style={{ fontSize: 22, fontWeight: 500 }}>172/6 <span className="sb-overs">(20 ov)</span></div>
           </div>
         </div>
@@ -117,7 +117,7 @@ export default function LiveScoring() {
               <tbody>
                 {liveMatch.batters.map((b) => (
                   <tr key={b.name}>
-                    <td><b>{b.name}</b>{b.onStrike && <span style={{ color: 'var(--red)', marginLeft: 6 }}>●</span>}</td>
+                    <td><b>{b.name}</b>{b.onStrike && <span style={{ color: 'var(--brand-text)', marginLeft: 6 }}>●</span>}</td>
                     <td className="num"><b>{b.r}</b></td><td className="num">{b.b}</td><td className="num">{b.f}</td><td className="num">{b.s}</td>
                     <td className="num">{((b.r / b.b) * 100).toFixed(1)}</td>
                   </tr>

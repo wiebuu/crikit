@@ -79,7 +79,7 @@ function ProductPreview() {
               <div className="scoreboard" style={{ padding: '16px 18px' }}>
                 <div className="row between">
                   <span className="sb-label">M31 · Ganga Titans chasing 173</span>
-                  <span className="badge badge-red" style={{ background: 'rgba(242,100,112,.15)', color: '#ff8d97' }}><span className="live-dot" /> LIVE</span>
+                  <span className="badge" style={{ background: 'rgba(255,255,255,.06)', color: '#d6d8e6', borderColor: 'rgba(255,255,255,.1)' }}><span className="live-dot" style={{ color: '#8ea2ff' }} /> LIVE</span>
                 </div>
                 <div className="row" style={{ marginTop: 10 }}>
                   <TeamMark id="GT" />
@@ -109,7 +109,7 @@ function ProductPreview() {
                   {standings.slice(0, 6).map((t, i) => (
                     <tr key={t.id} className={i < 4 ? 'qualify' : ''}>
                       <td style={{ padding: '9px 14px' }}><div className="row" style={{ gap: 8 }}><span className="subtle mono" style={{ width: 12 }}>{i + 1}</span><TeamMark id={t.id} size="sm" /><span style={{ fontWeight: 500 }}>{t.name}</span></div></td>
-                      <td className="num" style={{ padding: '9px 14px', color: t.nrr >= 0 ? 'var(--brand-text)' : 'var(--red)' }}>{fmtNrr(t.nrr)}</td>
+                      <td className="num" style={{ padding: '9px 14px', color: t.nrr >= 0 ? 'var(--success)' : 'var(--red)' }}>{fmtNrr(t.nrr)}</td>
                       <td className="num" style={{ padding: '9px 14px' }}><b>{t.pts}</b></td>
                     </tr>
                   ))}

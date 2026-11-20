@@ -8,14 +8,14 @@ export const tournament = {
 };
 
 export const teams = [
-  { id: 'HH', name: 'Himalayan Hawks', color: '#0b6e4f', captain: 'Arjun Negi', coach: 'R. Bhandari', home: 'SRHU Ground, Dehradun', founded: 2019, players: 16, p: 7, w: 6, l: 1, nr: 0, nrr: 1.284, form: ['W', 'W', 'L', 'W', 'W'] },
-  { id: 'DS', name: 'Doon Strikers', color: '#1d4ed8', captain: 'Rohit Rawat', coach: 'S. Thapa', home: 'Maharana Pratap Stadium', founded: 2018, players: 15, p: 7, w: 5, l: 2, nr: 0, nrr: 0.912, form: ['W', 'L', 'W', 'W', 'W'] },
-  { id: 'RR', name: 'Rishikesh Rangers', color: '#c2410c', captain: 'Vikas Bisht', coach: 'A. Joshi', home: 'Ganga View Oval', founded: 2020, players: 16, p: 7, w: 4, l: 2, nr: 1, nrr: 0.433, form: ['W', 'NR', 'W', 'L', 'W'] },
-  { id: 'GT', name: 'Ganga Titans', color: '#7c3aed', captain: 'Manish Chauhan', coach: 'K. Pant', home: 'Haridwar Sports Complex', founded: 2017, players: 17, p: 7, w: 4, l: 3, nr: 0, nrr: 0.102, form: ['L', 'W', 'W', 'L', 'W'] },
-  { id: 'MM', name: 'Mussoorie Mavericks', color: '#0891b2', captain: 'Deepak Kaintura', coach: 'P. Rana', home: 'Hill Top Ground', founded: 2021, players: 15, p: 7, w: 3, l: 4, nr: 0, nrr: -0.215, form: ['L', 'L', 'W', 'W', 'L'] },
-  { id: 'HR', name: 'Haridwar Heroes', color: '#ca8a04', captain: 'Sandeep Saini', coach: 'M. Gusain', home: 'Haridwar Sports Complex', founded: 2019, players: 16, p: 7, w: 2, l: 4, nr: 1, nrr: -0.488, form: ['L', 'W', 'NR', 'L', 'L'] },
-  { id: 'NK', name: 'Nainital Knights', color: '#be123c', captain: 'Harsh Bora', coach: 'D. Mehra', home: 'Flats Ground, Nainital', founded: 2016, players: 15, p: 7, w: 2, l: 5, nr: 0, nrr: -0.871, form: ['L', 'L', 'W', 'L', 'L'] },
-  { id: 'GG', name: 'Garhwal Gladiators', color: '#475569', captain: 'Nitin Butola', coach: 'V. Semwal', home: 'Pauri Cricket Ground', founded: 2022, players: 14, p: 7, w: 1, l: 6, nr: 0, nrr: -1.142, form: ['L', 'L', 'L', 'W', 'L'] },
+  { id: 'HH', name: 'Himalayan Hawks', color: '#3e5bd8', captain: 'Arjun Negi', coach: 'R. Bhandari', home: 'SRHU Ground, Dehradun', founded: 2019, players: 16, p: 7, w: 6, l: 1, nr: 0, nrr: 1.284, form: ['W', 'W', 'L', 'W', 'W'] },
+  { id: 'DS', name: 'Doon Strikers', color: '#2b8aa3', captain: 'Rohit Rawat', coach: 'S. Thapa', home: 'Maharana Pratap Stadium', founded: 2018, players: 15, p: 7, w: 5, l: 2, nr: 0, nrr: 0.912, form: ['W', 'L', 'W', 'W', 'W'] },
+  { id: 'RR', name: 'Rishikesh Rangers', color: '#b5714a', captain: 'Vikas Bisht', coach: 'A. Joshi', home: 'Ganga View Oval', founded: 2020, players: 16, p: 7, w: 4, l: 2, nr: 1, nrr: 0.433, form: ['W', 'NR', 'W', 'L', 'W'] },
+  { id: 'GT', name: 'Ganga Titans', color: '#7c63d4', captain: 'Manish Chauhan', coach: 'K. Pant', home: 'Haridwar Sports Complex', founded: 2017, players: 17, p: 7, w: 4, l: 3, nr: 0, nrr: 0.102, form: ['L', 'W', 'W', 'L', 'W'] },
+  { id: 'MM', name: 'Mussoorie Mavericks', color: '#3f9282', captain: 'Deepak Kaintura', coach: 'P. Rana', home: 'Hill Top Ground', founded: 2021, players: 15, p: 7, w: 3, l: 4, nr: 0, nrr: -0.215, form: ['L', 'L', 'W', 'W', 'L'] },
+  { id: 'HR', name: 'Haridwar Heroes', color: '#a68a45', captain: 'Sandeep Saini', coach: 'M. Gusain', home: 'Haridwar Sports Complex', founded: 2019, players: 16, p: 7, w: 2, l: 4, nr: 1, nrr: -0.488, form: ['L', 'W', 'NR', 'L', 'L'] },
+  { id: 'NK', name: 'Nainital Knights', color: '#b0657d', captain: 'Harsh Bora', coach: 'D. Mehra', home: 'Flats Ground, Nainital', founded: 2016, players: 15, p: 7, w: 2, l: 5, nr: 0, nrr: -0.871, form: ['L', 'L', 'W', 'L', 'L'] },
+  { id: 'GG', name: 'Garhwal Gladiators', color: '#6b7385', captain: 'Nitin Butola', coach: 'V. Semwal', home: 'Pauri Cricket Ground', founded: 2022, players: 14, p: 7, w: 1, l: 6, nr: 0, nrr: -1.142, form: ['L', 'L', 'L', 'W', 'L'] },
 ].map((t) => ({ ...t, pts: t.w * 2 + t.nr }));
 
 export const teamById = Object.fromEntries(teams.map((t) => [t.id, t]));

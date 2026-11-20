@@ -4,12 +4,13 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGri
 import { PageHead, Stat, TeamMark, StatusBadge, Form, fmtNrr, chart } from '../components/ui.jsx';
 import { teams, fixtures, players, activity, runsByTeam, liveMatch, teamById } from '../data/mock.js';
 
+const N = ['var(--surface-2)', 'var(--text-2)'];
 const actIcon = {
-  score: [Radio, 'var(--red-soft)', 'var(--red)'],
-  audit: [ShieldCheck, 'var(--brand-soft)', 'var(--brand-text)'],
-  team: [Users, 'var(--blue-soft)', 'var(--blue)'],
-  fixture: [CalendarDays, 'var(--amber-soft)', 'var(--amber)'],
-  report: [FileText, 'var(--surface-3)', 'var(--text-2)'],
+  score: [Radio, 'var(--brand-soft)', 'var(--brand-text)'],
+  audit: [ShieldCheck, ...N],
+  team: [Users, ...N],
+  fixture: [CalendarDays, ...N],
+  report: [FileText, ...N],
 };
 
 export default function Dashboard() {
@@ -29,7 +30,7 @@ export default function Dashboard() {
         <Stat label="Registered teams" value={teams.length} foot={<><b>+1</b> since last season</>} icon={Shield} />
         <Stat label="Active players" value={teams.reduce((s, t) => s + t.players, 0)} foot={`${players.filter(p => p.status !== 'Fit').length} on injury watch`} icon={Users} tone="blue" />
         <Stat label="Matches played" value={`${played}/56`} foot={<><b>{Math.round(played / 56 * 100)}%</b> of league stage</>} icon={CalendarDays} tone="amber" />
-        <Stat label="Live now" value="1" foot="RR vs GT · Ganga View Oval" icon={Activity} tone="red" />
+        <Stat label="Live now" value="1" foot="RR vs GT · Ganga View Oval" icon={Activity} tone="accent" />
       </div>
 
       <div className="grid two-col" style={{ gridTemplateColumns: '1.35fr 1fr', marginBottom: 20 }}>
@@ -146,7 +147,7 @@ export default function Dashboard() {
                   <td className="mono">{i + 1}</td>
                   <td><div className="row"><TeamMark id={t.id} size="sm" /><b>{t.name}</b></div></td>
                   <td className="num">{t.p}</td><td className="num">{t.w}</td><td className="num">{t.l}</td>
-                  <td className="num" style={{ color: t.nrr >= 0 ? 'var(--brand-text)' : 'var(--red)' }}>{fmtNrr(t.nrr)}</td>
+                  <td className="num" style={{ color: t.nrr >= 0 ? 'var(--success)' : 'var(--red)' }}>{fmtNrr(t.nrr)}</td>
                   <td className="num"><b>{t.pts}</b></td>
                   <td><Form form={t.form} /></td>
                 </tr>

@@ -24,7 +24,7 @@ function Item({ to, label, icon: Icon, badge, end }) {
   return (
     <NavLink to={to} end={end} className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
       <Icon size={16} strokeWidth={1.9} /> {label}
-      {badge && <span className="badge badge-red">{badge}</span>}
+      {badge && <span className="badge badge-accent">{badge}</span>}
     </NavLink>
   );
 }

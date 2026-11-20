@@ -47,7 +47,7 @@ export default function Standings() {
                   <td className="mono"><b>{i + 1}</b></td>
                   <td><div className="row"><TeamMark id={t.id} /><div><b>{t.name}</b><div className="subtle" style={{ fontSize: 12 }}>Capt. {t.captain}</div></div></div></td>
                   <td className="num">{t.p}</td><td className="num">{t.w}</td><td className="num">{t.l}</td><td className="num">{t.nr}</td>
-                  <td className="num" style={{ color: t.nrr >= 0 ? 'var(--brand-text)' : 'var(--red)' }}>{fmtNrr(t.nrr)}</td>
+                  <td className="num" style={{ color: t.nrr >= 0 ? 'var(--success)' : 'var(--red)' }}>{fmtNrr(t.nrr)}</td>
                   <td className="num" style={{ fontSize: 15 }}><b>{t.pts}</b></td>
                   <td><Form form={t.form} /></td>
                 </tr>

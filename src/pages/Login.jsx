@@ -30,14 +30,14 @@ export default function Login() {
           <blockquote>Run your whole tournament — teams, fixtures, scores and standings — from one screen.</blockquote>
           <div style={{ display: 'grid', gap: 14, marginTop: 32 }}>
             {points.map(({ icon: Icon, text }) => (
-              <div key={text} className="row" style={{ color: '#b7cbc2', fontSize: 14.5 }}>
-                <span style={{ width: 30, height: 30, borderRadius: 8, display: 'grid', placeItems: 'center', background: 'rgba(16,185,129,.15)', color: '#4ade9f' }}><Icon size={15} /></span>
+              <div key={text} className="row" style={{ color: '#b9bbcc', fontSize: 14.5 }}>
+                <span style={{ width: 30, height: 30, borderRadius: 8, display: 'grid', placeItems: 'center', background: 'rgba(84,112,230,.18)', color: '#a9b8ff' }}><Icon size={15} /></span>
                 {text}
               </div>
             ))}
           </div>
         </div>
-        <div style={{ fontSize: 12.5, color: '#6f8a7e' }}>© 2026 Crickit · SRHU School of Science & Technology</div>
+        <div style={{ fontSize: 12.5, color: '#6f7186' }}>© 2026 Crickit · SRHU School of Science & Technology</div>
       </div>
 
       <div className="auth-form">

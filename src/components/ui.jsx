@@ -5,7 +5,7 @@ import { teamById } from '../data/mock.js';
 export function TeamMark({ id, size = '' }) {
   const t = teamById[id];
   return (
-    <span className={`team-mark ${size}`} style={{ background: t?.color ?? '#475569' }} title={t?.name}>
+    <span className={`team-mark ${size}`} style={{ '--tc': t?.color ?? '#6b7385' }} title={t?.name}>
       {id}
     </span>
   );
@@ -23,7 +23,7 @@ export function Form({ form }) {
 
 export function StatusBadge({ status }) {
   if (status === 'Live')
-    return <span className="badge badge-red"><span className="live-dot" /> Live</span>;
+    return <span className="badge badge-accent"><span className="live-dot" /> Live</span>;
   if (status === 'Completed') return <span className="badge badge-green">Completed</span>;
   if (status === 'Upcoming') return <span className="badge badge-blue">Upcoming</span>;
   if (status === 'Fit') return <span className="badge badge-green">Fit</span>;
@@ -46,12 +46,12 @@ export function PageHead({ title, sub, children }) {
 
 export function Stat({ label, value, foot, icon: Icon, tone = 'green' }) {
   const tones = {
-    green: ['var(--brand-soft)', 'var(--brand)'],
+    green: ['var(--brand-soft)', 'var(--brand-text)'],
     red: ['var(--red-soft)', 'var(--red)'],
     blue: ['var(--blue-soft)', 'var(--blue)'],
     amber: ['var(--amber-soft)', 'var(--amber)'],
   };
-  const [bg, fg] = tones[tone];
+  const [bg, fg] = tone === 'accent' ? tones.green : ['var(--surface-2)', 'var(--text-2)'];
   return (
     <div className="card stat">
       <div className="stat-top">
@@ -68,8 +68,8 @@ export function Logo({ size = 20 }) {
   return (
     <span className="brand-logo">
       <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="12" r="8" fill="#e63946" />
-        <path d="M6.5 9.5c3.5 1.6 7.5 1.6 11 0M6.5 14.5c3.5-1.6 7.5-1.6 11 0" stroke="#fff" strokeWidth="1.3" strokeDasharray="1.6 1.6" />
+        <circle cx="12" cy="12" r="7.5" stroke="#fff" strokeWidth="1.8" />
+        <path d="M7.2 8.6c3.1 1.5 6.5 1.5 9.6 0M7.2 15.4c3.1-1.5 6.5-1.5 9.6 0" stroke="#fff" strokeOpacity=".75" strokeWidth="1.2" strokeDasharray="1.4 1.6" strokeLinecap="round" />
       </svg>
     </span>
   );
