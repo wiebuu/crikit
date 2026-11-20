@@ -1,10 +1,9 @@
 // Mock data for the frontend prototype.
 // When the Express/MongoDB backend is ready, replace these with API calls.
 
-export const tournament = {
-  name: 'Himalayan Premier League 2026',
-  format: 'T20 · Round Robin + Playoffs',
-  venueCount: 4,
+export const org = {
+  name: 'Crickit',
+  season: 'Season 2026',
 };
 
 export const teams = [
@@ -105,5 +104,5 @@ export const reports = [
   { id: 'R-1029', title: 'Player Statistics — All Teams', type: 'Player stats', date: '2026-11-16', size: '412 KB', format: 'CSV' },
   { id: 'R-1028', title: 'Score Edit Audit Log — November', type: 'Audit', date: '2026-11-15', size: '58 KB', format: 'CSV' },
   { id: 'R-1027', title: 'Match Summary — M29 HH vs NK', type: 'Match summary', date: '2026-11-18', size: '276 KB', format: 'PDF' },
-  { id: 'R-1026', title: 'Fixture Schedule — Remaining League', type: 'Fixtures', date: '2026-11-14', size: '74 KB', format: 'PDF' },
+  { id: 'R-1026', title: 'Fixture Schedule — Upcoming Matches', type: 'Fixtures', date: '2026-11-14', size: '74 KB', format: 'PDF' },
 ];

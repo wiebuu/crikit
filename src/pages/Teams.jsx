@@ -10,7 +10,7 @@ export default function Teams() {
 
   return (
     <>
-      <PageHead title="Teams" sub="Registered squads, captains and coaching staff for this tournament.">
+      <PageHead title="Teams" sub="Registered squads, captains and coaching staff.">
         <button className="btn btn-primary"><Plus size={15} /> Register team</button>
       </PageHead>
 

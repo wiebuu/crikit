@@ -2,20 +2,20 @@ import { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation, Link } from 'react-router-dom';
 import {
   LayoutDashboard, Shield, Users, CalendarDays, Radio, Trophy, FileText,
-  Search, Bell, Menu, Settings, LogOut, ChevronsUpDown, ChevronRight, HelpCircle,
+  Search, Bell, Menu, Settings, LogOut, ChevronRight, HelpCircle,
 } from 'lucide-react';
 import { Logo, ThemeToggle } from './ui.jsx';
-import { tournament } from '../data/mock.js';
+import { org } from '../data/mock.js';
 
 const nav = [
   { to: '/app', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/app/live', label: 'Live Scoring', icon: Radio, badge: 'LIVE' },
-  { to: '/app/fixtures', label: 'Fixtures', icon: CalendarDays },
-  { to: '/app/standings', label: 'Leaderboard', icon: Trophy },
 ];
 const manage = [
   { to: '/app/teams', label: 'Teams', icon: Shield },
   { to: '/app/players', label: 'Players', icon: Users },
+  { to: '/app/fixtures', label: 'Matches & Fixtures', icon: CalendarDays },
+  { to: '/app/live', label: 'Live Scoring', icon: Radio, badge: 'LIVE' },
+  { to: '/app/standings', label: 'Leaderboard', icon: Trophy },
   { to: '/app/reports', label: 'Reports', icon: FileText },
 ];
 const titles = Object.fromEntries([...nav, ...manage].map((n) => [n.to, n.label]));
@@ -45,18 +45,9 @@ export default function AppLayout() {
           </div>
         </Link>
 
-        <button className="ws-switch" type="button">
-          <Trophy size={16} color="var(--brand-text)" />
-          <div style={{ textAlign: 'left', flex: 1, minWidth: 0 }}>
-            <div className="t">HPL 2026</div>
-            <div className="s">{tournament.format.split(' · ')[0]} · League stage</div>
-          </div>
-          <ChevronsUpDown size={14} color="var(--text-3)" />
-        </button>
-
-        <div className="nav-label">Tournament</div>
+        <div className="nav-label">Overview</div>
         {nav.map((n) => <Item key={n.to} {...n} />)}
-        <div className="nav-label">Manage</div>
+        <div className="nav-label">Team management</div>
         {manage.map((n) => <Item key={n.to} {...n} />)}
         <div className="nav-label">Account</div>
         <a className="nav-link" href="#/app" onClick={(e) => e.preventDefault()}><Settings size={16} strokeWidth={1.9} /> Settings</a>
@@ -66,7 +57,7 @@ export default function AppLayout() {
           <span className="avatar">SS</span>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div className="who">Sagar Saini</div>
-            <div className="role">Tournament Admin</div>
+            <div className="role">Admin</div>
           </div>
           <Link to="/login" className="icon-btn ghost" aria-label="Sign out" title="Sign out"><LogOut size={15} /></Link>
         </div>
@@ -76,7 +67,7 @@ export default function AppLayout() {
         <header className="topbar">
           <button className="icon-btn menu-toggle" onClick={() => setOpen(true)} aria-label="Open menu"><Menu size={17} /></button>
           <div className="crumbs">
-            <span>{tournament.name}</span>
+            <span>{org.name}</span>
             <ChevronRight size={14} />
             <b>{titles[pathname] ?? 'Dashboard'}</b>
           </div>

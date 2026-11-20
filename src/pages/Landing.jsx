@@ -23,7 +23,7 @@ const steps = [
 ];
 
 const roles = [
-  { icon: Shield, title: 'Admin', text: 'Runs the tournament end to end.', items: ['Register teams, venues and officials', 'Generate and edit fixtures', 'Verify scores and export reports'] },
+  { icon: Shield, title: 'Admin', text: 'Manages the whole system.', items: ['Register teams, players and venues', 'Generate and edit fixtures', 'Verify scores and export reports'] },
   { icon: ClipboardList, title: 'Coach', text: 'Manages a squad through the season.', items: ['Maintain player profiles', 'Pick the playing XI for each match', 'Track team form and statistics'] },
   { icon: UserRound, title: 'Players & fans', text: 'Follow every ball as it happens.', items: ['Live scores and commentary', 'Personal stats and records', 'Leaderboards and fixtures'] },
 ];
@@ -46,11 +46,11 @@ const timeline = [
   { m: 'Month 02', t: 'Core data & scheduling engine', p: 100 },
   { m: 'Month 03', t: 'Scoring & live pipeline', p: 60 },
   { m: 'Month 04', t: 'Dashboards & reporting', p: 15 },
-  { m: 'Month 05', t: 'Pilot & tournament launch', p: 0 },
+  { m: 'Month 05', t: 'Pilot & launch', p: 0 },
 ];
 
 const faqs = [
-  { q: 'Who is Crickit built for?', a: 'School, college and club tournament organisers, plus the coaches, players and fans who follow them. It replaces spreadsheets and group chats with one shared source of truth.' },
+  { q: 'Who is Crickit built for?', a: 'Cricket teams at schools, colleges and clubs: the admins who run them, the coaches who manage squads, and the players and fans who follow every match. It replaces spreadsheets and group chats with one shared source of truth.' },
   { q: 'How does the fixture generator avoid clashes?', a: 'It uses a deterministic round-robin algorithm that checks venue availability and minimum rest days per team before committing a schedule.' },
   { q: 'How is Net Run Rate calculated?', a: 'NRR is recomputed on every committed result: runs scored per over minus runs conceded per over, across all completed matches.' },
   { q: 'Can scores be changed after a match?', a: 'Only by authorised roles. Every edit is recorded in an immutable audit log and can require umpire verification.' },
@@ -204,10 +204,10 @@ export default function Landing() {
           <Link to="/app/live" className="eyebrow">
             <span className="tag">New</span> Live ball-by-ball scoring is here <ArrowRight size={13} />
           </Link>
-          <h1>Cricket tournaments, <span className="accent">run like clockwork.</span></h1>
+          <h1>Cricket team management, <span className="accent">made simple.</span></h1>
           <p className="lead">
-            Crickit brings team registration, fixture scheduling, live scoring and real-time leaderboards
-            into one secure platform — for admins, coaches and fans.
+            Crickit brings team and player registration, match scheduling, live scoring and real-time
+            standings into one secure platform — for admins, coaches and players.
           </p>
           <div className="hero-cta">
             <Link to="/app" className="btn btn-primary btn-lg">Explore the dashboard <ArrowRight size={16} /></Link>
@@ -216,7 +216,7 @@ export default function Landing() {
           <div className="hero-note">
             <span><Check size={14} /> No setup needed</span>
             <span><Check size={14} /> Works on any device</span>
-            <span><Check size={14} /> Sample league data included</span>
+            <span><Check size={14} /> Sample team data included</span>
           </div>
           <ProductPreview />
         </div>
@@ -239,7 +239,7 @@ export default function Landing() {
           <div className="section-head">
             <span className="kicker">// The problem</span>
             <h2>Why cricket operations break down</h2>
-            <p>Most local and college tournaments still run on paper, spreadsheets and group chats. That costs time and causes mistakes.</p>
+            <p>Most school, college and club teams are still managed on paper, spreadsheets and group chats. That costs time and causes mistakes.</p>
           </div>
           <div className="problems">
             {problems.map(({ icon: Icon, title, text }) => (
@@ -258,8 +258,8 @@ export default function Landing() {
         <div className="container">
           <div className="section-head">
             <span className="kicker">// Features</span>
-            <h2>Everything a tournament needs, in one place</h2>
-            <p>From the first registration to the final trophy, every step is tracked, verified and visible.</p>
+            <h2>Everything your team needs, in one place</h2>
+            <p>From registering players to the final scorecard, every step is tracked, verified and visible.</p>
           </div>
           <div className="bento">
             <div className="bento-card span-4">
@@ -412,8 +412,8 @@ export default function Landing() {
       {/* CTA */}
       <div className="container">
         <div className="cta-band">
-          <h2>Ready for your next tournament?</h2>
-          <p>Take a tour of the admin dashboard with a full sample league.</p>
+          <h2>Ready to manage your team?</h2>
+          <p>Take a tour of the admin dashboard with sample teams and matches.</p>
           <div className="row">
             <Link to="/app" className="btn btn-lg btn-white">Open dashboard <ArrowRight size={16} /></Link>
             <Link to="/login" className="btn btn-lg btn-outline">Sign in</Link>

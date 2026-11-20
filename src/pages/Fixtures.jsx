@@ -13,7 +13,7 @@ export default function Fixtures() {
 
   return (
     <>
-      <PageHead title="Fixtures" sub="Clash-free round-robin schedule across all venues.">
+      <PageHead title="Matches & Fixtures" sub="Clash-free round-robin schedule across all venues.">
         <button className="btn" onClick={() => setGenerated(true)}><Wand2 size={15} /> Auto-generate schedule</button>
         <button className="btn btn-primary"><Plus size={15} /> Add match</button>
       </PageHead>
@@ -21,7 +21,7 @@ export default function Fixtures() {
       {generated && (
         <div className="card" style={{ padding: '14px 20px', marginBottom: 20, display: 'flex', gap: 12, alignItems: 'center', background: 'var(--brand-soft)', borderColor: 'var(--brand-line)', boxShadow: 'none' }}>
           <CheckCircle2 size={18} color="var(--brand-text)" />
-          <span><b>Schedule check passed.</b> 56 league matches across 4 venues · 0 venue clashes · minimum 2 rest days per team.</span>
+          <span><b>Schedule check passed.</b> All matches scheduled across 4 venues · 0 venue clashes · minimum 2 rest days per team.</span>
         </div>
       )}
 

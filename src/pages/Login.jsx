@@ -27,7 +27,7 @@ export default function Login() {
           <div><div className="brand-name">Crickit</div><div className="brand-sub">Team Management System</div></div>
         </Link>
         <div>
-          <blockquote>Run your whole tournament — teams, fixtures, scores and standings — from one screen.</blockquote>
+          <blockquote>Manage your teams, players, matches and scores — all from one screen.</blockquote>
           <div style={{ display: 'grid', gap: 14, marginTop: 32 }}>
             {points.map(({ icon: Icon, text }) => (
               <div key={text} className="row" style={{ color: '#b9bbcc', fontSize: 14.5 }}>

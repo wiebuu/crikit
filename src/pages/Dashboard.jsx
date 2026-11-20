@@ -21,7 +21,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <PageHead title="Good afternoon, Sagar" sub="Here’s what’s happening across the Himalayan Premier League today.">
+      <PageHead title="Good afternoon, Sagar" sub="Here’s an overview of your teams, players and matches today.">
         <button className="btn"><RefreshCw size={15} /> Sync</button>
         <Link to="/app/fixtures" className="btn btn-primary"><CalendarDays size={15} /> New fixture</Link>
       </PageHead>
@@ -29,7 +29,7 @@ export default function Dashboard() {
       <div className="stats">
         <Stat label="Registered teams" value={teams.length} foot={<><b>+1</b> since last season</>} icon={Shield} />
         <Stat label="Active players" value={teams.reduce((s, t) => s + t.players, 0)} foot={`${players.filter(p => p.status !== 'Fit').length} on injury watch`} icon={Users} tone="blue" />
-        <Stat label="Matches played" value={`${played}/56`} foot={<><b>{Math.round(played / 56 * 100)}%</b> of league stage</>} icon={CalendarDays} tone="amber" />
+        <Stat label="Matches played" value={played} foot={<><b>{fixtures.filter((f) => f.status === 'Upcoming').length}</b> upcoming this week</>} icon={CalendarDays} tone="amber" />
         <Stat label="Live now" value="1" foot="RR vs GT · Ganga View Oval" icon={Activity} tone="accent" />
       </div>
 
@@ -97,7 +97,7 @@ export default function Dashboard() {
         <div className="card">
           <div className="card-head">
             <h3>Runs scored vs conceded</h3>
-            <span className="hint">League stage · all matches</span>
+            <span className="hint">Season 2026 · all matches</span>
           </div>
           <div className="card-body" style={{ height: 300 }}>
             <ResponsiveContainer width="100%" height="100%">
@@ -135,7 +135,7 @@ export default function Dashboard() {
 
       <div className="card">
         <div className="card-head">
-          <h3>Points table — top 4</h3>
+          <h3>Team standings — top 4</h3>
           <Link to="/app/standings" className="btn btn-sm btn-ghost">Full leaderboard <ArrowRight size={14} /></Link>
         </div>
         <div className="table-wrap">

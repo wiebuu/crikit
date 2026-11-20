@@ -27,14 +27,14 @@ export default function Standings() {
 
   return (
     <>
-      <PageHead title="Leaderboard" sub="Points table recalculated instantly after every completed match.">
+      <PageHead title="Leaderboard" sub="Team rankings recalculated instantly after every completed match.">
         <button className="btn"><Download size={15} /> Download PDF</button>
       </PageHead>
 
       <div className="card" style={{ marginBottom: 20 }}>
         <div className="card-head">
-          <h3>Points table</h3>
-          <span className="row subtle" style={{ fontSize: 12.5, gap: 6 }}><span style={{ width: 10, height: 10, background: 'var(--brand)', borderRadius: 2 }} /> Playoff qualification zone (top 4)</span>
+          <h3>Team standings</h3>
+          <span className="row subtle" style={{ fontSize: 12.5, gap: 6 }}><span style={{ width: 10, height: 10, background: 'var(--brand)', borderRadius: 2 }} /> Top 4 teams</span>
         </div>
         <div className="table-wrap">
           <table className="table">
@@ -61,8 +61,8 @@ export default function Standings() {
       </div>
 
       <div className="grid two-col" style={{ gridTemplateColumns: '1fr 1fr' }}>
-        <Leaders title="Most runs — Orange Cap" rows={topRuns} valueKey="runs" unit="runs" />
-        <Leaders title="Most wickets — Purple Cap" rows={topWkts} valueKey="wkts" unit="wkts" />
+        <Leaders title="Most runs" rows={topRuns} valueKey="runs" unit="runs" />
+        <Leaders title="Most wickets" rows={topWkts} valueKey="wkts" unit="wkts" />
       </div>
     </>
   );
